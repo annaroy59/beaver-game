@@ -404,3 +404,9 @@ canvas.auto {
     .popup { min-width: unset; width: calc(100vw - 40px); padding: 18px 16px; }
     .help-canvas { width: 160px; height: auto; }
 }
+
+/* Help device switching */
+.help-mobile { display: none; }
+.help-desktop { display: block; }
+.touch-device .help-mobile { display: block; }
+.touch-device .help-desktop { display: none; }

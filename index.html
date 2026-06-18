@@ -99,16 +99,22 @@
                 <div class="carousel-track">
                     <div class="carousel-slide active" id="slide-controls">
                         <h3 class="help-title">Управление</h3>
-                        <div class="help-item"><span class="help-key">↑ ↓ ← → / W A S D</span> — движение</div>
-                        <div class="help-item"><span class="help-key">Shift</span> — вверх</div>
-                        <div class="help-item"><span class="help-key">Пробел</span> — старт / автоигра</div>
-                        <div class="help-item"><span class="help-key">Enter</span> — пауза</div>
-                        <div class="help-item"><span class="help-key">Escape</span> — закрыть меню</div>
-                        <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
-                        <div class="help-hr"></div>
-                        <div class="help-item"><span class="help-key">Свайп</span> — движение (телефон)</div>
-                        <div class="help-item"><span class="help-key">Тап</span> — старт / автоигра</div>
-                        <div class="help-item"><span class="help-key">D-pad</span> — точное управление</div>
+                        <div class="help-desktop">
+                            <div class="help-item"><span class="help-key">↑ ↓ ← → / W A S D</span> — движение</div>
+                            <div class="help-item"><span class="help-key">Shift</span> — вверх</div>
+                            <div class="help-item"><span class="help-key">Пробел</span> — старт / автоигра</div>
+                            <div class="help-item"><span class="help-key">Enter</span> — пауза</div>
+                            <div class="help-item"><span class="help-key">Escape</span> — закрыть меню</div>
+                            <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        </div>
+                        <div class="help-mobile">
+                            <div class="help-item"><span class="help-key">Свайп</span> — движение</div>
+                            <div class="help-item"><span class="help-key">D-pad</span> — точное управление</div>
+                            <div class="help-item"><span class="help-key">Тап</span> — старт / автоигра</div>
+                            <div class="help-item"><span class="help-key">AI</span> — кнопка автоигры</div>
+                            <div class="help-item"><span class="help-key">⏸</span> — пауза</div>
+                            <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        </div>
                         <canvas class="help-canvas" id="helpLog" width="200" height="50"></canvas>
                     </div>
                     <div class="carousel-slide" id="slide-logs">
@@ -137,7 +143,12 @@
                     </div>
                     <div class="carousel-slide" id="slide-autoplay">
                         <h3 class="help-title">Автоигра</h3>
-                        <div class="help-desc">Нажми пробел для автоигры.</div>
+                        <div class="help-desktop">
+                            <div class="help-desc">Нажми пробел для автоигры.</div>
+                        </div>
+                        <div class="help-mobile">
+                            <div class="help-desc">Нажми кнопку <span class="help-key">AI</span> для автоигры.</div>
+                        </div>
                         <div class="help-desc">ИИ сам:</div>
                         <div class="help-item">• ест брёвна</div>
                         <div class="help-item">• подбирает бонусы (если ближе)</div>

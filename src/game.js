@@ -2301,6 +2301,21 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 // ═══════════════════════════════════════════
+// Touch Device Detection
+// ═══════════════════════════════════════════
+
+let isTouchDevice = false;
+document.addEventListener('touchstart', function detectTouch() {
+    isTouchDevice = true;
+    document.body.classList.add('touch-device');
+    document.removeEventListener('touchstart', detectTouch);
+}, { once: true });
+if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+    isTouchDevice = true;
+    document.body.classList.add('touch-device');
+}
+
+// ═══════════════════════════════════════════
 // Touch Handlers (Mobile)
 // ═══════════════════════════════════════════
 
