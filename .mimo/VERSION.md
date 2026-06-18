@@ -18,7 +18,10 @@
 - High score в localStorage
 - Закрытие попапов по Escape
 - Анимация появления overlay (fadeIn)
+- Мобильное управление: свайп по canvas, D-pad кнопки, тап для старта/автоигры
+- Адаптивная верстка: canvas подстраивается под экран, touch-friendly кнопки
+- Touch-трекинг глаз для бобра
 
 ## Тесты
-- 80 тестов, 148 assertions — все проходят
-- Покрытие: старт, движение, столкновения, еда, настройки, AI, щит, телепорты, пауза, Shift, localStorage, иероглифы, магнит, XSS, grid size, ESC, speed conversion, getTarget, teleporterShortcut, spawnPowerup, init reset, keyToDirection
+- 90 тестов, 165 assertions — все проходят
+- Покрытие: старт, движение, столкновения, еда, настройки, AI, щит, телепорты, пауза, Shift, localStorage, иероглифы, магнит, XSS, grid size, ESC, speed conversion, getTarget, teleporterShortcut, spawnPowerup, init reset, keyToDirection, touch input (handleDirectionInput, handleTap, D-pad)

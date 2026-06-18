@@ -2301,6 +2301,172 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 // ═══════════════════════════════════════════
+// Touch Device Detection
+// ═══════════════════════════════════════════
+
+let isTouchDevice = false;
+document.addEventListener('touchstart', function detectTouch() {
+    isTouchDevice = true;
+    document.body.classList.add('touch-device');
+    document.removeEventListener('touchstart', detectTouch);
+}, { once: true });
+if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+    isTouchDevice = true;
+    document.body.classList.add('touch-device');
+}
+
+// ═══════════════════════════════════════════
+// Touch Handlers (Mobile)
+// ═══════════════════════════════════════════
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchStartTime = Date.now();
+    mouseClientX = t.clientX;
+    mouseClientY = t.clientY;
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    mouseClientX = t.clientX;
+    mouseClientY = t.clientY;
+    const rect = canvas.getBoundingClientRect();
+    mouseX = (t.clientX - rect.left) * (canvas.width / rect.width);
+    mouseY = (t.clientY - rect.top) * (canvas.height / rect.height);
+}, { passive: false });
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    const dt = Date.now() - touchStartTime;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 15 && dt < 300) {
+        handleTap();
+        return;
+    }
+
+    if (dist < 20) return;
+
+    let dir;
+    if (Math.abs(dx) > Math.abs(dy)) {
+        dir = dx > 0 ? 'ArrowRight' : 'ArrowLeft';
+    } else {
+        dir = dy > 0 ? 'ArrowDown' : 'ArrowUp';
+    }
+    handleDirectionInput(dir);
+}, { passive: false });
+
+function handleTap() {
+    if (settingsOverlay.classList.contains('active') || reviewsOverlay.classList.contains('active') || helpOverlay.classList.contains('active')) return;
+
+    if (gameRunning) {
+        autoPlay = !autoPlay;
+        canvas.classList.toggle('auto', autoPlay);
+        updateMobileAutoBtn();
+    } else if (!gameOver && !gameWon) {
+        startGame({ x: 1, y: 0 }, false);
+    } else {
+        init();
+        startGame({ x: 1, y: 0 }, false);
+    }
+}
+
+function handleDirectionInput(key) {
+    if (settingsOverlay.classList.contains('active') || reviewsOverlay.classList.contains('active') || helpOverlay.classList.contains('active')) return;
+
+    const movementKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+
+    if (!gameRunning && !gameOver && !gameWon) {
+        startGame(keyToDirection(key), false);
+        return;
+    }
+
+    if ((gameOver || gameWon)) {
+        init();
+        startGame(keyToDirection(key), false);
+        return;
+    }
+
+    if (!gameRunning) return;
+
+    const canReverse = beaver.length <= 1;
+
+    if (key === 'ArrowUp' && (canReverse || direction.y !== 1)) {
+        nextDirection = { x: 0, y: -1 };
+    } else if (key === 'ArrowDown' && (canReverse || direction.y !== -1)) {
+        nextDirection = { x: 0, y: 1 };
+    } else if (key === 'ArrowLeft' && (canReverse || direction.x !== 1)) {
+        nextDirection = { x: -1, y: 0 };
+    } else if (key === 'ArrowRight' && (canReverse || direction.x !== -1)) {
+        nextDirection = { x: 1, y: 0 };
+    }
+}
+
+// D-pad buttons
+document.querySelectorAll('.dpad-btn').forEach(btn => {
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const dir = btn.dataset.dir;
+        const keyMap = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight' };
+        handleDirectionInput(keyMap[dir]);
+    }, { passive: false });
+});
+
+// Mobile pause button
+document.getElementById('mobilePause').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameRunning && !gameOver && !gameWon) {
+        paused = !paused;
+        if (!paused) {
+            lastTickTime = performance.now();
+            lastFrameTime = 0;
+            tickProgress = 1;
+            tickAccumulator = 0;
+        }
+        document.getElementById('mobilePause').textContent = paused ? '\u25B6' : '\u23F8';
+    }
+}, { passive: false });
+
+// Mobile auto-play button
+document.getElementById('mobileAuto').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (gameRunning) {
+        autoPlay = !autoPlay;
+        canvas.classList.toggle('auto', autoPlay);
+        updateMobileAutoBtn();
+    } else if (!gameOver && !gameWon) {
+        startGame({ x: 1, y: 0 }, true);
+        updateMobileAutoBtn();
+    } else {
+        init();
+        startGame({ x: 1, y: 0 }, true);
+        updateMobileAutoBtn();
+    }
+}, { passive: false });
+
+function updateMobileAutoBtn() {
+    const btn = document.getElementById('mobileAuto');
+    if (autoPlay) {
+        btn.classList.add('active');
+        btn.textContent = '\u23F9 AI';
+    } else {
+        btn.classList.remove('active');
+        btn.textContent = '\u25B6 AI';
+    }
+}
+
+// ═══════════════════════════════════════════
 // Help Canvas Animations
 // ═══════════════════════════════════════════
 

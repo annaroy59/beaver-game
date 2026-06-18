@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Бобёр</title>
     <link rel="stylesheet" href="src/styles.css">
 </head>
@@ -16,6 +16,18 @@
         <div>Рекорд: <span id="highscore">0</span></div>
     </div>
     <canvas id="game" width="600" height="600"></canvas>
+    <div class="mobile-controls" id="mobileControls">
+        <div class="dpad">
+            <button class="dpad-btn dpad-up" data-dir="up">&#9650;</button>
+            <button class="dpad-btn dpad-left" data-dir="left">&#9664;</button>
+            <button class="dpad-btn dpad-right" data-dir="right">&#9654;</button>
+            <button class="dpad-btn dpad-down" data-dir="down">&#9660;</button>
+        </div>
+        <div class="mobile-action-btns">
+            <button class="mobile-action" id="mobilePause">&#10074;&#10074;</button>
+            <button class="mobile-action" id="mobileAuto">&#9654; AI</button>
+        </div>
+    </div>
     <div class="version">v<span id="version">2.5.0</span></div>
 
     <div class="overlay" id="settingsOverlay">
@@ -87,12 +99,22 @@
                 <div class="carousel-track">
                     <div class="carousel-slide active" id="slide-controls">
                         <h3 class="help-title">Управление</h3>
-                        <div class="help-item"><span class="help-key">↑ ↓ ← → / W A S D</span> — движение</div>
-                        <div class="help-item"><span class="help-key">Shift</span> — вверх</div>
-                        <div class="help-item"><span class="help-key">Пробел</span> — старт / автоигра</div>
-                        <div class="help-item"><span class="help-key">Enter</span> — пауза</div>
-                        <div class="help-item"><span class="help-key">Escape</span> — закрыть меню</div>
-                        <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        <div class="help-desktop">
+                            <div class="help-item"><span class="help-key">↑ ↓ ← → / W A S D</span> — движение</div>
+                            <div class="help-item"><span class="help-key">Shift</span> — вверх</div>
+                            <div class="help-item"><span class="help-key">Пробел</span> — старт / автоигра</div>
+                            <div class="help-item"><span class="help-key">Enter</span> — пауза</div>
+                            <div class="help-item"><span class="help-key">Escape</span> — закрыть меню</div>
+                            <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        </div>
+                        <div class="help-mobile">
+                            <div class="help-item"><span class="help-key">Свайп</span> — движение</div>
+                            <div class="help-item"><span class="help-key">D-pad</span> — точное управление</div>
+                            <div class="help-item"><span class="help-key">Тап</span> — старт / автоигра</div>
+                            <div class="help-item"><span class="help-key">AI</span> — кнопка автоигры</div>
+                            <div class="help-item"><span class="help-key">⏸</span> — пауза</div>
+                            <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        </div>
                         <canvas class="help-canvas" id="helpLog" width="200" height="50"></canvas>
                     </div>
                     <div class="carousel-slide" id="slide-logs">
@@ -121,7 +143,12 @@
                     </div>
                     <div class="carousel-slide" id="slide-autoplay">
                         <h3 class="help-title">Автоигра</h3>
-                        <div class="help-desc">Нажми пробел для автоигры.</div>
+                        <div class="help-desktop">
+                            <div class="help-desc">Нажми пробел для автоигры.</div>
+                        </div>
+                        <div class="help-mobile">
+                            <div class="help-desc">Нажми кнопку <span class="help-key">AI</span> для автоигры.</div>
+                        </div>
                         <div class="help-desc">ИИ сам:</div>
                         <div class="help-item">• ест брёвна</div>
                         <div class="help-item">• подбирает бонусы (если ближе)</div>
