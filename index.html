@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бобёр</title>
+    <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+    <h1>Бобёр</h1>
+    <div class="scores">
+        <div>Счёт: <span id="score">0</span></div>
+        <button class="settings-btn" id="helpBtn">?</button>
+        <button class="settings-btn" id="reviewsBtn">&#9733;</button>
+        <button class="settings-btn" id="settingsBtn">&#9881;</button>
+        <div>Рекорд: <span id="highscore">0</span></div>
+    </div>
+    <canvas id="game" width="600" height="600"></canvas>
+    <div class="version">v<span id="version">2.5.0</span></div>
+
+    <div class="overlay" id="settingsOverlay">
+        <div class="popup">
+            <h2>Настройки</h2>
+            <div class="setting">
+                <label>Скорость: <span id="speedVal">Нормальный</span></label>
+                <div class="speed-row">
+                    <canvas class="speed-beaver" id="settingsBeaver" width="80" height="80"></canvas>
+                    <div class="speed-col">
+                        <input type="range" id="speedRange" min="1" max="10" step="1" value="5">
+                        <canvas class="speed-preview" id="speedPreview" width="280" height="40"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="setting">
+                <label>
+                    <input type="checkbox" id="speedUpCheck" checked>
+                    Увеличивать скорость каждые 3 бревна
+                </label>
+            </div>
+            <div class="setting">
+                <label>
+                    <input type="checkbox" id="winCheck">
+                    Победа при длине: <input type="number" id="winLength" value="20" min="5" max="400" style="width:50px;background:#0a0e1a;color:#eee;border:1px solid #3a7ca5;border-radius:4px;text-align:center;">
+                </label>
+            </div>
+            <div class="setting">
+                <label>
+                    <input type="checkbox" id="teleportCheck" checked>
+                    Телепорты (меняют позицию каждые 10 сек)
+                </label>
+            </div>
+            <div class="setting">
+                <label>Размер поля: <span id="gridSizeVal">12 × 12</span></label>
+                <input type="range" id="gridSize" min="10" max="16" step="1" value="12">
+            </div>
+            <div class="popup-btns">
+                <button class="save" id="saveBtn">Сохранить</button>
+                <button class="cancel" id="cancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="reviewsOverlay">
+        <div class="popup reviews-popup">
+            <h2>Отзывы</h2>
+            <div class="reviews-filter">
+                <select id="reviewVersion">
+                    <option value="all">Все версии</option>
+                </select>
+            </div>
+            <div class="reviews-list" id="reviewsList"></div>
+            <div class="reviews-pager" id="reviewsPager"></div>
+            <div class="popup-btns">
+                <button class="cancel" id="closeReviewsBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="helpOverlay">
+        <div class="popup help-popup">
+            <div class="help-header">
+                <canvas id="helpBeaver" width="60" height="60"></canvas>
+                <h2>Как играть</h2>
+            </div>
+            <div class="help-carousel">
+                <button class="carousel-arrow" id="helpPrev">&#8249;</button>
+                <div class="carousel-track">
+                    <div class="carousel-slide active" id="slide-controls">
+                        <h3 class="help-title">Управление</h3>
+                        <div class="help-item"><span class="help-key">↑ ↓ ← → / W A S D</span> — движение</div>
+                        <div class="help-item"><span class="help-key">Shift</span> — вверх</div>
+                        <div class="help-item"><span class="help-key">Пробел</span> — старт / автоигра</div>
+                        <div class="help-item"><span class="help-key">Enter</span> — пауза</div>
+                        <div class="help-item"><span class="help-key">Escape</span> — закрыть меню</div>
+                        <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        <canvas class="help-canvas" id="helpLog" width="200" height="50"></canvas>
+                    </div>
+                    <div class="carousel-slide" id="slide-logs">
+                        <h3 class="help-title">Бревна</h3>
+                        <div class="help-desc">Ешь брёвна — расти.</div>
+                        <div class="help-desc">Каждые 3 бревна скорость ↑.</div>
+                        <div class="help-desc">Чем длиннее бобр — тем сложнее уворачиваться.</div>
+                    </div>
+                    <div class="carousel-slide" id="slide-teleport">
+                        <h3 class="help-title">Телепорты</h3>
+                        <canvas class="help-canvas" id="helpTeleport" width="200" height="60"></canvas>
+                        <div class="help-desc">Голубой и оранжевый порталы.</div>
+                        <div class="help-desc">Войди в один — выйди из другого.</div>
+                        <div class="help-desc">Меняют позицию каждые 10 сек.</div>
+                        <div class="help-desc">При перемещении тело обрезается.</div>
+                    </div>
+                    <div class="carousel-slide" id="slide-powerups">
+                        <h3 class="help-title">Бонусы</h3>
+                        <div class="help-desc" style="color:#f5d442;">Кукуруза-щит</div>
+                        <canvas class="help-canvas" id="helpCorn" width="200" height="50"></canvas>
+                        <div class="help-desc">Щит на 1 столкновение — авто-уворот.</div>
+                        <hr class="help-hr">
+                        <div class="help-desc" style="color:#ff4444;">Магнит</div>
+                        <div class="help-desc">Вишенка. Притягивает бревно к голове (до 3 клеток).</div>
+                        <div class="help-desc">Работает 10 сек. Можно взять повторно.</div>
+                    </div>
+                    <div class="carousel-slide" id="slide-autoplay">
+                        <h3 class="help-title">Автоигра</h3>
+                        <div class="help-desc">Нажми пробел для автоигры.</div>
+                        <div class="help-desc">ИИ сам:</div>
+                        <div class="help-item">• ест брёвна</div>
+                        <div class="help-item">• подбирает бонусы (если ближе)</div>
+                        <div class="help-item">• использует телепорты (если быстрее)</div>
+                        <div class="help-item">• не зацикливается на телепортах</div>
+                        <div class="help-desc" style="margin-top:8px;color:#53d769;">Зелёная рамка — автоигра включена.</div>
+                    </div>
+                </div>
+                <button class="carousel-arrow" id="helpNext">&#8250;</button>
+            </div>
+            <div class="carousel-dots" id="helpDots">
+                <button class="carousel-dot active" data-slide="0"></button>
+                <button class="carousel-dot" data-slide="1"></button>
+                <button class="carousel-dot" data-slide="2"></button>
+                <button class="carousel-dot" data-slide="3"></button>
+                <button class="carousel-dot" data-slide="4"></button>
+            </div>
+            <div class="popup-btns">
+                <button class="cancel" id="closeHelpBtn">Понятно</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="reviews/reviews.js"></script>
+    <script src="src/game.js"></script>
+</body>
+</html>

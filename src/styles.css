@@ -1,0 +1,323 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #0a0e1a;
+    font-family: 'Segoe UI', sans-serif;
+    color: #eee;
+}
+.version {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #555;
+}
+h1 { margin-bottom: 10px; font-size: 2rem; color: #7eb8da; text-shadow: 0 0 10px rgba(126,184,218,0.3); }
+.scores {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+.scores span { font-weight: bold; color: #7eb8da; }
+canvas {
+    border: 3px solid #3a7ca5;
+    background: #0d1b2a;
+    transition: border-color 0.3s;
+}
+canvas.auto {
+    border-color: #53d769;
+}
+.settings-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #7eb8da;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: 1px solid #3a7ca5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+.settings-btn:hover { background: #3a7ca5; color: #fff; }
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+.overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.popup {
+    background: #0d1b2a;
+    border: 2px solid #3a7ca5;
+    border-radius: 12px;
+    padding: 24px 30px;
+    min-width: 320px;
+}
+.popup h2 {
+    margin-bottom: 18px;
+    text-align: center;
+    color: #7eb8da;
+}
+.setting {
+    margin-bottom: 16px;
+}
+.setting label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+.setting input[type="range"] {
+    width: 100%;
+    accent-color: #3a7ca5;
+}
+.speed-preview {
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin-top: 6px;
+    border-radius: 6px;
+    background: #0a0e1a;
+}
+.speed-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.speed-col {
+    flex: 1;
+}
+.speed-beaver {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    background: #0a0e1a;
+    flex-shrink: 0;
+}
+#helpBeaver {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    background: #0a0e1a;
+}
+.setting .val {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+.setting input[type="checkbox"] {
+    accent-color: #e94560;
+}
+.popup-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.popup-btns button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.popup-btns .save {
+    background: #3a7ca5;
+    color: #fff;
+}
+.popup-btns .save:hover { background: #2a5c7a; }
+.popup-btns .cancel {
+    background: #333;
+    color: #ccc;
+}
+.popup-btns .cancel:hover { background: #444; }
+.reviews-popup {
+    max-width: 480px;
+    max-height: 80vh;
+}
+.reviews-list {
+    max-height: 55vh;
+    overflow-y: auto;
+    margin-bottom: 16px;
+}
+.reviews-list::-webkit-scrollbar { width: 6px; }
+.reviews-list::-webkit-scrollbar-track { background: #0a0e1a; }
+.reviews-list::-webkit-scrollbar-thumb { background: #3a7ca5; border-radius: 3px; }
+.review {
+    background: #111d2e;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-left: 3px solid #3a7ca5;
+}
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.review-name {
+    font-weight: bold;
+    color: #7eb8da;
+    font-size: 0.9rem;
+}
+.review-meta {
+    font-size: 0.75rem;
+    color: #666;
+}
+.review-stars {
+    color: #f5a623;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+.review-text {
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.reviews-filter {
+    margin-bottom: 12px;
+}
+.reviews-filter select {
+    width: 100%;
+    padding: 6px 10px;
+    background: #111d2e;
+    color: #ccc;
+    border: 1px solid #3a7ca5;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+.reviews-pager {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.reviews-pager button {
+    padding: 4px 12px;
+    border: 1px solid #3a7ca5;
+    border-radius: 4px;
+    background: transparent;
+    color: #7eb8da;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+.reviews-pager button.active {
+    background: #3a7ca5;
+    color: #fff;
+}
+.reviews-pager button:hover:not(.active) {
+    background: rgba(58,124,165,0.3);
+}
+.help-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.help-header h2 {
+    margin-bottom: 0;
+}
+.help-popup {
+    max-width: 400px;
+}
+.help-item {
+    color: #ccc;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+.help-key {
+    display: inline-block;
+    background: #1a2a3a;
+    border: 1px solid #3a7ca5;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #7eb8da;
+    margin-right: 4px;
+}
+.help-hr {
+    border: none;
+    border-top: 1px solid #1a2a3a;
+    margin: 14px 0;
+}
+.help-desc {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.help-title {
+    color: #7eb8da;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+}
+.help-canvas {
+    display: block;
+    margin: 6px auto;
+    border-radius: 6px;
+    background: #0a0e1a;
+}
+.help-carousel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.carousel-track {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #0a0e1a;
+    height: 320px;
+}
+.carousel-slide {
+    display: none;
+    padding: 14px 16px;
+}
+.carousel-slide.active { display: block; }
+.carousel-arrow {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #3a7ca5;
+    border-radius: 50%;
+    background: transparent;
+    color: #7eb8da;
+    font-size: 1.4rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.carousel-arrow:hover { background: #3a7ca5; color: #fff; }
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid #3a7ca5;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+.carousel-dot.active { background: #3a7ca5; }
