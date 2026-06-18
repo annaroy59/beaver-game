@@ -1086,6 +1086,106 @@ assert(s80.snake[0].x === 8, 'beaver x at center of 16-grid');
 assert(s80.snake[0].y === 8, 'beaver y at center of 16-grid');
 teardown();
 
+// 81. handleDirectionInput starts game from idle
+test('handleDirectionInput starts game');
+setup();
+window.eval(`handleDirectionInput('ArrowRight')`);
+const s81 = getGameState();
+assert(s81.gameRunning === true, 'game starts on handleDirectionInput');
+assert(s81.direction.x === 1, 'direction is right');
+teardown();
+
+// 82. handleDirectionInput restarts after game over
+test('handleDirectionInput restarts after game over');
+setup();
+window.eval(`gameOver = true; gameRunning = false;`);
+window.eval(`handleDirectionInput('ArrowDown')`);
+const s82 = getGameState();
+assert(s82.gameRunning === true, 'game restarts');
+assert(s82.direction.y === 1, 'direction is down');
+assert(s82.snake.length === 1, 'beaver reset to 1');
+teardown();
+
+// 83. handleDirectionInput changes direction mid-game
+test('handleDirectionInput changes direction');
+setup();
+window.eval(`handleDirectionInput('ArrowRight')`);
+runGameTicks(1);
+window.eval(`handleDirectionInput('ArrowDown')`);
+runGameTicks(1);
+const s83 = getGameState();
+assert(s83.direction.y === 1, 'direction changed to down');
+teardown();
+
+// 84. handleDirectionInput respects reverse blocking
+test('handleDirectionInput blocks reverse');
+setup();
+window.eval(`handleDirectionInput('ArrowRight')`);
+window.eval(`beaver = [{x:5,y:5},{x:5,y:4}]`);
+window.eval(`handleDirectionInput('ArrowLeft')`);
+const nd84 = window.eval(`nextDirection`);
+assert(nd84.x === 1, 'reverse blocked with 2 segments');
+teardown();
+
+// 85. handleDirectionInput ignores when overlay open
+test('handleDirectionInput ignores with overlay');
+setup();
+window.eval(`settingsOverlay.classList.add('active')`);
+window.eval(`handleDirectionInput('ArrowRight')`);
+const s85 = getGameState();
+assert(s85.gameRunning === false, 'game does not start with overlay');
+teardown();
+
+// 86. handleTap starts game
+test('handleTap starts game');
+setup();
+window.eval(`handleTap()`);
+const s86 = getGameState();
+assert(s86.gameRunning === true, 'game starts on tap');
+teardown();
+
+// 87. handleTap toggles autoPlay during game
+test('handleTap toggles autoPlay');
+setup();
+window.eval(`handleTap()`);
+const ap87a = window.eval(`autoPlay`);
+assert(ap87a === false, 'autoPlay off on first tap (manual)');
+window.eval(`handleTap()`);
+const ap87b = window.eval(`autoPlay`);
+assert(ap87b === true, 'autoPlay on after second tap');
+teardown();
+
+// 88. handleTap restarts after game over
+test('handleTap restarts after game over');
+setup();
+window.eval(`gameOver = true; gameRunning = false;`);
+window.eval(`handleTap()`);
+const s88 = getGameState();
+assert(s88.gameRunning === true, 'game restarts on tap after game over');
+teardown();
+
+// 89. handleTap ignores with overlay
+test('handleTap ignores with overlay');
+setup();
+window.eval(`reviewsOverlay.classList.add('active')`);
+window.eval(`handleTap()`);
+const s89 = getGameState();
+assert(s89.gameRunning === false, 'tap ignored with reviews overlay');
+teardown();
+
+// 90. Mobile D-pad elements exist in DOM
+test('Mobile D-pad elements exist');
+setup();
+const dpad = document.querySelector('.dpad');
+const dpadBtns = document.querySelectorAll('.dpad-btn');
+const mobilePause = document.getElementById('mobilePause');
+const mobileAuto = document.getElementById('mobileAuto');
+assert(dpad !== null, 'dpad container exists');
+assert(dpadBtns.length === 4, '4 dpad buttons exist');
+assert(mobilePause !== null, 'mobile pause button exists');
+assert(mobileAuto !== null, 'mobile auto-play button exists');
+teardown();
+
 // === Summary ===
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass).length;

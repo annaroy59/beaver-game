@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Бобёр</title>
     <link rel="stylesheet" href="src/styles.css">
 </head>
@@ -16,6 +16,18 @@
         <div>Рекорд: <span id="highscore">0</span></div>
     </div>
     <canvas id="game" width="600" height="600"></canvas>
+    <div class="mobile-controls" id="mobileControls">
+        <div class="dpad">
+            <button class="dpad-btn dpad-up" data-dir="up">&#9650;</button>
+            <button class="dpad-btn dpad-left" data-dir="left">&#9664;</button>
+            <button class="dpad-btn dpad-right" data-dir="right">&#9654;</button>
+            <button class="dpad-btn dpad-down" data-dir="down">&#9660;</button>
+        </div>
+        <div class="mobile-action-btns">
+            <button class="mobile-action" id="mobilePause">&#10074;&#10074;</button>
+            <button class="mobile-action" id="mobileAuto">&#9654; AI</button>
+        </div>
+    </div>
     <div class="version">v<span id="version">2.5.0</span></div>
 
     <div class="overlay" id="settingsOverlay">
@@ -93,6 +105,10 @@
                         <div class="help-item"><span class="help-key">Enter</span> — пауза</div>
                         <div class="help-item"><span class="help-key">Escape</span> — закрыть меню</div>
                         <div class="help-item"><span class="help-key">1 сегмент</span> — разворот 180°</div>
+                        <div class="help-hr"></div>
+                        <div class="help-item"><span class="help-key">Свайп</span> — движение (телефон)</div>
+                        <div class="help-item"><span class="help-key">Тап</span> — старт / автоигра</div>
+                        <div class="help-item"><span class="help-key">D-pad</span> — точное управление</div>
                         <canvas class="help-canvas" id="helpLog" width="200" height="50"></canvas>
                     </div>
                     <div class="carousel-slide" id="slide-logs">
